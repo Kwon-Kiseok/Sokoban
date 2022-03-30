@@ -22,12 +22,18 @@
     <ClCompile Include="Framework\Game.c">
       <Filter>Framework</Filter>
     </ClCompile>
+    <ClCompile Include="Framework\Renderer.c">
+      <Filter>Framework</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
       <Filter>Main</Filter>
     </ClInclude>
     <ClInclude Include="Framework\Game.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\Renderer.h">
       <Filter>Framework</Filter>
     </ClInclude>
   </ItemGroup>
