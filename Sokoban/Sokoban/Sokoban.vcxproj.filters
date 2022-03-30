@@ -13,5 +13,13 @@
     <ClCompile Include="main.c">
       <Filter>Main</Filter>
     </ClCompile>
+    <ClCompile Include="stdafx.c">
+      <Filter>Main</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stdafx.h">
+      <Filter>Main</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

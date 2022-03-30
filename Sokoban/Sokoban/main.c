@@ -1,8 +1,7 @@
-﻿#include <stdio.h>
+﻿#include "stdafx.h"
 
 int main()
 {
-	puts("Hello World!");
-	puts("Fix: Git global name setting");
+	puts("Hello, World!");
 	return 0;
 }
