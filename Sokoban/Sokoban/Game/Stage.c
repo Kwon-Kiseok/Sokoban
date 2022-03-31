@@ -7,7 +7,8 @@ static int32_t s_boxOnGoalCount = 0; // 현재 맞은 개수
 static int32_t s_playerX = 0;
 static int32_t s_playerY = 0;
 static EStageLevel s_stageLevel = 1;
-static player* s_player;
+static player* s_player = NULL;
+static bool s_isPosGoal = false;
 
 bool parseMapType(int32_t i, int32_t j, char mapType)
 {
@@ -82,21 +83,34 @@ bool BoxMove(EDir input_dir)
 
 bool CanMove(int32_t i, int32_t j, EDir input_dir)
 {
+	char** curPos = s_map[s_player->pos_y][s_player->pos_x];
 	// 현재 이동한 곳이 벽일 경우
-	if (s_map[s_player->pos_y][s_player->pos_x] == MAPTYPE_WALL)
+	if (curPos == MAPTYPE_WALL)
 	{
 		return false;
 	}
 	// 현재 이동한 곳이 박스일 경우
-	else if (s_map[s_player->pos_y][s_player->pos_x] == MAPTYPE_BOX)
+	else if (curPos == MAPTYPE_BOX)
 	{
 		// 박스 이동
 		if (!BoxMove(input_dir))
 			return false;
 	}
 	// 현재 이동한 곳이 골일 경우
+	else if (curPos == MAPTYPE_GOAL)
+	{
+		// 위에 올라갈 순 있음, 단 지나온 다음 다시 'O'로 바꿔줘야함
+		s_isPosGoal = true;
+		return true;
+	}
 	// 현재 이동한 곳이 BoxOnGoal일 경우
-
+	else if (curPos == MAPTYPE_BOX_ON_GOAL)
+	{
+		// 박스 이동
+		if (!BoxMove(input_dir))
+			return false;
+	}
+	s_isPosGoal = false;
 	return true;
 }
 
@@ -162,15 +176,21 @@ void LoadStage(EStageLevel level)
 
 void PlayerInput()
 {
+
 	// 스테이지 리셋 버튼
 	if (GetButtonUp(KEYCODE_R))
 	{
 		LoadStage(s_stageLevel);
 	}
 
+	// 플레이어 이동
 	// 원래 있던 곳 소멸
-	s_map[s_player->pos_y][s_player->pos_x] = ' ';
-
+	if (!s_isPosGoal)
+		s_map[s_player->pos_y][s_player->pos_x] = ' ';
+	else
+	{
+		s_map[s_player->pos_y][s_player->pos_x] = 'O';
+	}
 	if (GetButtonUp(KEYCODE_W))
 	{
 		s_player->pos_y--;
@@ -203,7 +223,6 @@ void PlayerInput()
 			s_player->pos_x--;
 		}
 	}
-
 	// 새로 도착한 곳에 그려줌
 	s_map[s_player->pos_y][s_player->pos_x] = 'P';
 }
