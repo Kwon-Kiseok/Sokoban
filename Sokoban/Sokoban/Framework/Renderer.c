@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Renderer.h"
+#include "UI.h"
 
 static char s_map[MAP_SIZE][MAP_SIZE];
 static HANDLE s_consoleHandle;
@@ -43,6 +44,7 @@ void RenderMap()
         puts(s_map[i]);
     }
 
+    UI();
     clear();
 }
 

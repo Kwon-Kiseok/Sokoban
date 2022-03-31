@@ -146,6 +146,7 @@
     <ClCompile Include="Framework\Input.c" />
     <ClCompile Include="Framework\Renderer.c" />
     <ClCompile Include="Framework\Timer.c" />
+    <ClCompile Include="Framework\UI.c" />
     <ClCompile Include="Game\Player.c" />
     <ClCompile Include="Game\Stage.c" />
     <ClCompile Include="main.c" />
@@ -158,6 +159,7 @@
     <ClInclude Include="Framework\Input.h" />
     <ClInclude Include="Framework\Renderer.h" />
     <ClInclude Include="Framework\Timer.h" />
+    <ClInclude Include="Framework\UI.h" />
     <ClInclude Include="Game\Player.h" />
     <ClInclude Include="Game\Stage.h" />
     <ClInclude Include="Game\type.h" />

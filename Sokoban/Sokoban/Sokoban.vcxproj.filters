@@ -43,6 +43,9 @@
     <ClCompile Include="Game\Player.c">
       <Filter>Game</Filter>
     </ClCompile>
+    <ClCompile Include="Framework\UI.c">
+      <Filter>Framework</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -71,6 +74,9 @@
     </ClInclude>
     <ClInclude Include="Game\Player.h">
       <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\UI.h">
+      <Filter>Framework</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
