@@ -11,6 +11,8 @@ bool Initialize()
 
 	InitailizeTimer();
 	
+	LoadStage(STAGE_01);
+
 	return true;
 }
 
@@ -21,22 +23,7 @@ void processInput()
 
 void update()
 {
-	// 2초 간격으로 특정 메시지를 깜빡이기
-	static float diffTime = 0.f;
-	static bool canShowMessage = false;
-
-	if (diffTime > 2.0f)
-	{
-		diffTime = 0.f;
-		canShowMessage = !canShowMessage;
-	}
-
-	if (canShowMessage)
-	{
-		SetMessage("twinkle");
-	}
-
-	diffTime += GetDeltaTime();
+	UpdateStage();
 }
 
 void render()

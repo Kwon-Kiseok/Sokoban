@@ -12,3 +12,8 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <Windows.h>
+
+#include "Macro.h"
+#include "Game/Stage.h"
+#include "Framework/Input.h"
+#include "Game/Player.h"
