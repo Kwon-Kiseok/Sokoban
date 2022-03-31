@@ -13,3 +13,5 @@ bool InitializeRenderer();
 /// </summary>
 /// <returns></returns>
 void RenderMap();
+
+void SetKeyMessage(int32_t keyCode);

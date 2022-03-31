@@ -14,6 +14,15 @@ static char s_map[MAP_SIZE][MAP_SIZE] = {
 
 static HANDLE s_consoleHandle;
 
+void clear()
+{
+	memset(s_map, ' ', sizeof(s_map));
+	for (size_t i = 0; i < MAP_SIZE; ++i)
+	{
+		s_map[i][MAP_SIZE - 1] = '\0';
+	}
+}
+
 bool InitializeRenderer()
 {
 	// 콘솔 핸들을 얻어옴
@@ -53,8 +62,16 @@ void RenderMap()
 	// 게임에서는 프로그램이 멈추는 일은 없어야 함
 	// 차라리 멈춰있는 장면을 계속 보여주는 것이 더 권장됨
 
-	for (int i = 0; i < MAP_SIZE; ++i)
+	for (size_t i = 0; i < MAP_SIZE; ++i)
 	{
 		puts(s_map[i]);
 	}
+
+	// 출력 후 현재 프레임을 지워줌
+	clear();
+}
+
+void SetKeyMessage(int32_t keyCode)
+{
+	sprintf_s(s_map[0], sizeof(s_map[0]), "%c키가 눌림", keyCode);
 }

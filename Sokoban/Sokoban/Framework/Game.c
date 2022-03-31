@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Game.h"
 #include "Renderer.h"
+#include "Input.h"
 
 bool Initialize()
 {
@@ -12,12 +13,27 @@ bool Initialize()
 
 void processInput()
 {
-
+	UpdateInput();
 }
 
 void update()
 {
-
+	if (GetButton(KEYCODE_W))
+	{
+		SetKeyMessage(KEYCODE_W);
+	}
+	else if (GetButton(KEYCODE_A))
+	{
+		SetKeyMessage(KEYCODE_A);
+	}
+	else if (GetButton(KEYCODE_S))
+	{
+		SetKeyMessage(KEYCODE_S);
+	}
+	else if (GetButton(KEYCODE_D))
+	{
+		SetKeyMessage(KEYCODE_D);
+	}
 }
 
 void render()
@@ -42,4 +58,6 @@ int32_t Run()
 		// 3. ·»´õ¸µ
 		render();
 	}
+
+	return 0;
 }
