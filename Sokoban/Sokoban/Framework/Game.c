@@ -25,9 +25,7 @@ void update()
 	static float diffTime = 0.f;
 	static bool canShowMessage = false;
 
-	diffTime += GetDeltaTime();
-
-	if (diffTime > 0.5f)
+	if (diffTime > 2.0f)
 	{
 		diffTime = 0.f;
 		canShowMessage = !canShowMessage;
@@ -38,6 +36,7 @@ void update()
 		SetMessage("twinkle");
 	}
 
+	diffTime += GetDeltaTime();
 }
 
 void render()
