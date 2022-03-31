@@ -9,7 +9,7 @@ typedef enum MapType
 {
 	MAPTYPE_WALL = '#',
 	MAPTYPE_PLAYER = 'P',
-	MAPTYPE_BOX = 'a',
+	MAPTYPE_BOX = 'B',
 	MAPTYPE_GOAL = 'O',
 	MAPTYPE_BOX_ON_GOAL = '@',
 	MAPTYPE_PATH = ' '
@@ -22,3 +22,9 @@ typedef enum StageLevel
 }EStageLevel;
 
 void LoadStage(EStageLevel level);
+
+void UpdateStage();
+
+const char** GetMap();
+
+bool CheckPosition(int32_t i, int32_t j);
