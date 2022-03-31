@@ -16,25 +16,17 @@ bool parseMapType(int32_t i, int32_t j, char mapType)
 		// 각 맵 타일별로 해줘야 하는 일들
 	case MAPTYPE_PLAYER:
 	{
-		//s_playerX = j;
-		//s_playerY = i;
 		s_player = CreatePlayer(j, i);
 	}
 		return true;
 	case MAPTYPE_WALL:
-		// 이동불가 -> 내가 플레이어의 위치 = -입력값
 		return true;
 	case MAPTYPE_BOX:
-		// 박스를 내가 입력한 방향으로 캐릭터를 이동, 박스를 밈
-		// 단 박스 앞에 벽이 있다면 밀리지않고 캐릭터도 이동하지 않음
 		return true;
 	case MAPTYPE_GOAL:
 		s_goalCount++;
-		// 박스를 밀고있는 채로 올라온다면 -> BOX_ON_GOAL로 변경
-		// 그냥 지나간다면 무시
 		return true;
 	case MAPTYPE_BOX_ON_GOAL:
-		// 이동불가 + 점수 획득
 		return true;
 	case MAPTYPE_PATH:
 		return true;
@@ -186,10 +178,10 @@ void PlayerInput()
 	// 원래 있던 곳 소멸
 	if (!s_player->isMoveOnGoal)
 		s_map[s_player->pos_y][s_player->pos_x] = ' ';
+	// 원래 있던 곳이 Goal일 경우 'O'로 돌려줌
 	else
-	{
 		s_map[s_player->pos_y][s_player->pos_x] = 'O';
-	}
+
 	if (GetButtonUp(KEYCODE_W))
 	{
 		s_player->pos_y--;
@@ -254,7 +246,7 @@ const char** GetMap()
 void GameOver()
 {
 	system("cls");
-	printf("게임 클리어");
+	puts("-   게임 클리어   -");
 	exit(1);
 }
 
