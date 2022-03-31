@@ -1,8 +1,6 @@
 #include "stdafx.h"
 #include "Renderer.h"
 
-#define MAP_SIZE 24
-
 static char s_map[MAP_SIZE][MAP_SIZE];
 static HANDLE s_consoleHandle;
 
