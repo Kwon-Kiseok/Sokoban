@@ -11,6 +11,7 @@ player* CreatePlayer(int32_t x, int32_t y)
 	}
 	rPlayer->pos_x = x;
 	rPlayer->pos_y = y;
+	rPlayer->isMoveOnGoal = false;
 
 	return rPlayer;
 }

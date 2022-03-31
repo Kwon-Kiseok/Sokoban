@@ -8,7 +8,6 @@ static int32_t s_playerX = 0;
 static int32_t s_playerY = 0;
 static EStageLevel s_stageLevel = 1;
 static player* s_player = NULL;
-static bool s_isPosGoal = false;
 
 bool parseMapType(int32_t i, int32_t j, char mapType)
 {
@@ -100,7 +99,7 @@ bool CanMove(int32_t i, int32_t j, EDir input_dir)
 	else if (curPos == MAPTYPE_GOAL)
 	{
 		// 위에 올라갈 순 있음, 단 지나온 다음 다시 'O'로 바꿔줘야함
-		s_isPosGoal = true;
+		s_player->isMoveOnGoal = true;
 		return true;
 	}
 	// 현재 이동한 곳이 BoxOnGoal일 경우
@@ -110,7 +109,7 @@ bool CanMove(int32_t i, int32_t j, EDir input_dir)
 		if (!BoxMove(input_dir))
 			return false;
 	}
-	s_isPosGoal = false;
+	s_player->isMoveOnGoal = false;
 	return true;
 }
 
@@ -185,7 +184,7 @@ void PlayerInput()
 
 	// 플레이어 이동
 	// 원래 있던 곳 소멸
-	if (!s_isPosGoal)
+	if (!s_player->isMoveOnGoal)
 		s_map[s_player->pos_y][s_player->pos_x] = ' ';
 	else
 	{
