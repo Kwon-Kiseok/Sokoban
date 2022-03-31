@@ -26,6 +26,7 @@
       <Filter>Framework</Filter>
     </ClCompile>
     <ClCompile Include="Framework\Input.c" />
+    <ClCompile Include="Framework\Timer.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -38,5 +39,6 @@
       <Filter>Framework</Filter>
     </ClInclude>
     <ClInclude Include="Framework\Input.h" />
+    <ClInclude Include="Framework\Timer.h" />
   </ItemGroup>
 </Project>

@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "Renderer.h"
 
-
 #define MAP_SIZE 24
 
 //static char s_backBuffer[MAP_SIZE][MAP_SIZE];
@@ -62,10 +61,14 @@ void RenderMap()
 	// 게임에서는 프로그램이 멈추는 일은 없어야 함
 	// 차라리 멈춰있는 장면을 계속 보여주는 것이 더 권장됨
 
-	for (size_t i = 0; i < MAP_SIZE; ++i)
-	{
-		puts(s_map[i]);
-	}
+	//sprintf_s(s_map[0], sizeof(s_map[0]), "DeltaTime : %f", GetDeltaTime());
+	//// 1 : deltaTime = x : 1  -> x = 1 / deltaTime
+	//int32_t fps = (int32_t)(1 / GetDeltaTime());
+	//sprintf_s(s_map[1], sizeof(s_map[1]), "FPS : %d", fps);
+	//for (size_t i = 0; i < MAP_SIZE; ++i)
+	//{
+	//	puts(s_map[i]);
+	//}
 
 	// 출력 후 현재 프레임을 지워줌
 	clear();
@@ -74,4 +77,10 @@ void RenderMap()
 void SetKeyMessage(int32_t keyCode)
 {
 	sprintf_s(s_map[0], sizeof(s_map[0]), "%c키가 눌림", keyCode);
+}
+
+void SetMessage(const char* message)
+{
+	strcpy_s(s_map[0], sizeof(s_map[0]), message);
+	//sprintf_s(s_map[0], sizeof(s_map[0]), "%s", message);
 }
