@@ -103,7 +103,7 @@ void PlayerMove()
 	if (GetButtonUp(KEYCODE_W))
 	{
 		s_playerY--;
-		if (!CheckPosition(s_playerY, s_playerX))
+		if (!CheckPosition(s_playerY, s_playerX, KEYCODE_W))
 		{
 			s_playerY++;
 		}
@@ -111,7 +111,7 @@ void PlayerMove()
 	else if (GetButtonUp(KEYCODE_A))
 	{
 		s_playerX--;
-		if (!CheckPosition(s_playerY, s_playerX))
+		if (!CheckPosition(s_playerY, s_playerX, KEYCODE_A))
 		{
 			s_playerX++;
 		}
@@ -119,7 +119,7 @@ void PlayerMove()
 	else if (GetButtonUp(KEYCODE_S))
 	{
 		s_playerY++;
-		if (!CheckPosition(s_playerY, s_playerX))
+		if (!CheckPosition(s_playerY, s_playerX, KEYCODE_S))
 		{
 			s_playerY--;
 		}
@@ -127,7 +127,7 @@ void PlayerMove()
 	else if (GetButtonUp(KEYCODE_D))
 	{
 		s_playerX++;
-		if (!CheckPosition(s_playerY, s_playerX))
+		if (!CheckPosition(s_playerY, s_playerX, KEYCODE_D))
 		{
 			s_playerX--;
 		}
@@ -137,12 +137,48 @@ void PlayerMove()
 	s_map[s_playerY][s_playerX] = 'P';
 }
 
-bool CheckPosition(int32_t i, int32_t j)
+bool BoxMove(EKeyCode keyCode)
+{
+	int32_t boxX = s_playerX;
+	int32_t boxY = s_playerY;
+
+	switch (keyCode)
+	{
+	case KEYCODE_W:
+		boxY--;
+		break;
+	case KEYCODE_A:
+		boxX--;
+		break;
+	case KEYCODE_S:
+		boxY++;
+		break;
+	case KEYCODE_D:
+		boxX++;
+		break;
+	}
+
+	if (s_map[boxY][boxX] == MAPTYPE_GOAL || s_map[boxY][boxX] == MAPTYPE_PATH || s_map[boxY][boxX] == MAPTYPE_BOX_ON_GOAL)
+	{
+		s_map[boxY][boxX] = 'B';
+		return true;
+	}
+	else
+		return false;
+}
+
+bool CheckPosition(int32_t i, int32_t j, EKeyCode keyCode)
 {
 	// 현재 이동한 곳이 벽일 경우
 	if (s_map[s_playerY][s_playerX] == MAPTYPE_WALL)
 	{
 		return false;
+	}
+	// 현재 이동한 곳이 박스일 경우
+	else if (s_map[s_playerY][s_playerX] == MAPTYPE_BOX)
+	{
+		// 박스 이동
+		return BoxMove(keyCode);
 	}
 	return true;
 }
