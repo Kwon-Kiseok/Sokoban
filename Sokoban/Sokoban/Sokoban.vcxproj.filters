@@ -25,9 +25,6 @@
     <ClCompile Include="Framework\Renderer.c">
       <Filter>Framework</Filter>
     </ClCompile>
-    <ClCompile Include="Framework\Input.c">
-      <Filter>Framework</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -37,9 +34,6 @@
       <Filter>Framework</Filter>
     </ClInclude>
     <ClInclude Include="Framework\Renderer.h">
-      <Filter>Framework</Filter>
-    </ClInclude>
-    <ClInclude Include="Framework\Input.h">
       <Filter>Framework</Filter>
     </ClInclude>
   </ItemGroup>
