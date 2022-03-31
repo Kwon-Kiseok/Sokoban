@@ -4,10 +4,10 @@
 static char s_map[MAP_SIZE][MAP_SIZE];
 static int32_t s_goalCount = 0; // 목표 갯수
 static int32_t s_boxOnGoalCount = 0; // 현재 맞은 개수
-static int32_t s_boxCount = 0; // 박스 개수
 static int32_t s_playerX = 0;
 static int32_t s_playerY = 0;
-
+static EStageLevel s_stageLevel = 1;
+static player* s_player;
 
 bool parseMapType(int32_t i, int32_t j, char mapType)
 {
@@ -16,15 +16,15 @@ bool parseMapType(int32_t i, int32_t j, char mapType)
 		// 각 맵 타일별로 해줘야 하는 일들
 	case MAPTYPE_PLAYER:
 	{
-		s_playerX = j;
-		s_playerY = i;
+		//s_playerX = j;
+		//s_playerY = i;
+		s_player = CreatePlayer(j, i);
 	}
 		return true;
 	case MAPTYPE_WALL:
 		// 이동불가 -> 내가 플레이어의 위치 = -입력값
 		return true;
 	case MAPTYPE_BOX:
-		s_boxCount++;
 		// 박스를 내가 입력한 방향으로 캐릭터를 이동, 박스를 밈
 		// 단 박스 앞에 벽이 있다면 밀리지않고 캐릭터도 이동하지 않음
 		return true;
@@ -34,7 +34,6 @@ bool parseMapType(int32_t i, int32_t j, char mapType)
 		// 그냥 지나간다면 무시
 		return true;
 	case MAPTYPE_BOX_ON_GOAL:
-		s_boxOnGoalCount++;
 		// 이동불가 + 점수 획득
 		return true;
 	case MAPTYPE_PATH:
@@ -43,6 +42,62 @@ bool parseMapType(int32_t i, int32_t j, char mapType)
 		return false;
 	}
 	// 반환은 행에 다다랐을 때
+}
+
+bool BoxMove(EDir input_dir)
+{
+	int32_t boxX = s_player->pos_x;
+	int32_t boxY = s_player->pos_y;
+
+	switch (input_dir)
+	{
+	case DIR_UP:
+		boxY--;
+		break;
+	case DIR_LEFT:
+		boxX--;
+		break;
+	case DIR_DOWN:
+		boxY++;
+		break;
+	case DIR_RIGHT:
+		boxX++;
+		break;
+	}
+
+	if (s_map[boxY][boxX] == MAPTYPE_PATH || s_map[boxY][boxX] == MAPTYPE_BOX_ON_GOAL)
+	{
+		s_map[boxY][boxX] = 'B';
+		return true;
+	}
+	else if (s_map[boxY][boxX] == MAPTYPE_GOAL)
+	{
+		s_map[boxY][boxX] = '@';
+		s_boxOnGoalCount++;
+		return true;
+	}
+	else
+		return false;
+}
+
+bool CanMove(int32_t i, int32_t j, EDir input_dir)
+{
+	// 현재 이동한 곳이 벽일 경우
+	if (s_map[s_player->pos_y][s_player->pos_x] == MAPTYPE_WALL)
+	{
+		return false;
+	}
+	// 현재 이동한 곳이 박스일 경우
+	else if (s_map[s_player->pos_y][s_player->pos_x] == MAPTYPE_BOX)
+	{
+		// 박스 이동
+		if (!BoxMove(input_dir))
+			return false;
+	}
+	// 현재 이동한 곳이 골일 경우
+	// 현재 이동한 곳이 BoxOnGoal일 경우
+
+	return true;
 }
 
 void clearStage()
@@ -58,9 +113,19 @@ void clearStage()
 	s_playerY = 0;
 }
 
+bool isStageClear()
+{
+	if (s_goalCount == s_boxOnGoalCount)
+	{
+		s_stageLevel++;
+		return true;
+	}
+	return false;
+}
+
 void LoadStage(EStageLevel level)
 {
-	assert(STAGE_01 <= level && level < STAGE_MAX);
+	assert(STAGE_01 <= level && level <= STAGE_MAX);
 
 	static char path[MAX_PATH] = { 0 };
 
@@ -72,9 +137,9 @@ void LoadStage(EStageLevel level)
 
 	clearStage();
 
-	for (size_t i = 0; i < MAP_SIZE; ++i)
+	for (int32_t i = 0; i < MAP_SIZE; ++i)
 	{
-		for (size_t j = 0; j < MAP_SIZE; ++j)
+		for (int32_t j = 0; j < MAP_SIZE; ++j)
 		{
 			char ch = fgetc(fp);
 
@@ -95,104 +160,84 @@ void LoadStage(EStageLevel level)
 	fclose(fp);
 }
 
-void PlayerMove()
+void PlayerInput()
 {
+	// 스테이지 리셋 버튼
+	if (GetButtonUp(KEYCODE_R))
+	{
+		LoadStage(s_stageLevel);
+	}
+
 	// 원래 있던 곳 소멸
-	s_map[s_playerY][s_playerX] = ' ';
+	s_map[s_player->pos_y][s_player->pos_x] = ' ';
 
 	if (GetButtonUp(KEYCODE_W))
 	{
-		s_playerY--;
-		if (!CheckPosition(s_playerY, s_playerX, KEYCODE_W))
+		s_player->pos_y--;
+		if (!CanMove(s_player->pos_y, s_player->pos_x, DIR_UP))
 		{
-			s_playerY++;
+			s_player->pos_y++;
 		}
 	}
 	else if (GetButtonUp(KEYCODE_A))
 	{
-		s_playerX--;
-		if (!CheckPosition(s_playerY, s_playerX, KEYCODE_A))
+		s_player->pos_x--;
+		if (!CanMove(s_player->pos_y, s_player->pos_x, DIR_LEFT))
 		{
-			s_playerX++;
+			s_player->pos_x++;
 		}
 	}
 	else if (GetButtonUp(KEYCODE_S))
 	{
-		s_playerY++;
-		if (!CheckPosition(s_playerY, s_playerX, KEYCODE_S))
+		s_player->pos_y++;
+		if (!CanMove(s_player->pos_y, s_player->pos_x, DIR_DOWN))
 		{
-			s_playerY--;
+			s_player->pos_y--;
 		}
 	}
 	else if (GetButtonUp(KEYCODE_D))
 	{
-		s_playerX++;
-		if (!CheckPosition(s_playerY, s_playerX, KEYCODE_D))
+		s_player->pos_x++;
+		if (!CanMove(s_player->pos_y, s_player->pos_x, DIR_RIGHT))
 		{
-			s_playerX--;
+			s_player->pos_x--;
 		}
 	}
 
 	// 새로 도착한 곳에 그려줌
-	s_map[s_playerY][s_playerX] = 'P';
-}
-
-bool BoxMove(EKeyCode keyCode)
-{
-	int32_t boxX = s_playerX;
-	int32_t boxY = s_playerY;
-
-	switch (keyCode)
-	{
-	case KEYCODE_W:
-		boxY--;
-		break;
-	case KEYCODE_A:
-		boxX--;
-		break;
-	case KEYCODE_S:
-		boxY++;
-		break;
-	case KEYCODE_D:
-		boxX++;
-		break;
-	}
-
-	if (s_map[boxY][boxX] == MAPTYPE_GOAL || s_map[boxY][boxX] == MAPTYPE_PATH || s_map[boxY][boxX] == MAPTYPE_BOX_ON_GOAL)
-	{
-		s_map[boxY][boxX] = 'B';
-		return true;
-	}
-	else
-		return false;
-}
-
-bool CheckPosition(int32_t i, int32_t j, EKeyCode keyCode)
-{
-	// 현재 이동한 곳이 벽일 경우
-	if (s_map[s_playerY][s_playerX] == MAPTYPE_WALL)
-	{
-		return false;
-	}
-	// 현재 이동한 곳이 박스일 경우
-	else if (s_map[s_playerY][s_playerX] == MAPTYPE_BOX)
-	{
-		// 박스 이동
-		return BoxMove(keyCode);
-	}
-	return true;
+	s_map[s_player->pos_y][s_player->pos_x] = 'P';
 }
 
 void UpdateStage()
 {
 	// 입력에 대해서 처리를 함
-	PlayerMove();
+	PlayerInput();
 	// 게임이 클리어 됐는지도 파악함
+	if (isStageClear())
+	{
+		DeletePlayer(s_player);
+		if (s_stageLevel != STAGE_MAX)
+		{
+			LoadStage(s_stageLevel);
+		}
+		else
+		{
+			GameOver();
+		}
+	}
+
 }
 
 const char** GetMap()
 {
-	return s_map;
+	return (char**)s_map;
+}
+
+void GameOver()
+{
+	system("cls");
+	printf("게임 클리어");
+	exit(1);
 }
 
 // 소코반 게임 완성

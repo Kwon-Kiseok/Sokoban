@@ -17,9 +17,20 @@ typedef enum MapType
 
 typedef enum StageLevel
 {
-	STAGE_01 = 1, 
+	STAGE_01 = 1,
+	STAGE_02,
+	STAGE_03,
+	STAGE_04,
+	STAGE_05,
 	STAGE_MAX 
 }EStageLevel;
+
+typedef struct BOX
+{
+	int32_t pos_x;
+	int32_t pos_y;
+	bool isCanMove;
+};
 
 void LoadStage(EStageLevel level);
 
@@ -27,4 +38,4 @@ void UpdateStage();
 
 const char** GetMap();
 
-bool CheckPosition(int32_t i, int32_t j);
+void GameOver();

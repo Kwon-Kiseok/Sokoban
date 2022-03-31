@@ -40,6 +40,9 @@
     <ClCompile Include="Game\Stage.c">
       <Filter>Game</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Player.c">
+      <Filter>Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -62,6 +65,12 @@
     </ClInclude>
     <ClInclude Include="Macro.h">
       <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\type.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player.h">
+      <Filter>Game</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
