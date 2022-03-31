@@ -3,84 +3,60 @@
 
 #define MAP_SIZE 24
 
-//static char s_backBuffer[MAP_SIZE][MAP_SIZE];
-
-static char s_map[MAP_SIZE][MAP_SIZE] = {
-	"*************",
-	"*  Sokoban  *",
-	"*************"
-};
-
+static char s_map[MAP_SIZE][MAP_SIZE];
 static HANDLE s_consoleHandle;
 
 void clear()
 {
-	memset(s_map, ' ', sizeof(s_map));
-	for (size_t i = 0; i < MAP_SIZE; ++i)
-	{
-		s_map[i][MAP_SIZE - 1] = '\0';
-	}
+    memset(s_map, ' ', sizeof(s_map));
+
+    for (size_t i = 0; i < MAP_SIZE; ++i)
+    {
+        s_map[i][MAP_SIZE - 1] = '\0';
+    }
 }
 
 bool InitializeRenderer()
 {
-	// 콘솔 핸들을 얻어옴
-	s_consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
-	if (INVALID_HANDLE_VALUE == s_consoleHandle)
-		return false;
+    s_consoleHandle = GetStdHandle
+    (STD_OUTPUT_HANDLE);
 
-	// 계속 갱신되고 있는 커서의 모습을 보이지 않게 해줌
-	/*CONSOLE_CURSOR_INFO info;
-	info.dwSize = 100;
-	info.bVisible = false;
+    if (INVALID_HANDLE_VALUE == s_consoleHandle)
+    {
+        return false;
+    }
 
-	if (false == SetConsoleCursorInfo(s_consoleHandle, &info))
-	{
-		return false;
-	}*/
-
-	return true;
+    return true;
 }
 
 void RenderMap()
 {
-	const static COORD initialPos = { 0,0 };
-	const static CONSOLE_CURSOR_INFO info = { 100, false };
-	
-	SetConsoleCursorPosition(s_consoleHandle, initialPos);
-	// Init에서 해줬을 때 콘솔 창이 변하거나 변화가 생기면
-	// 다시 포지션이 깨졌기에 렌더 해줄 때마다 초기값으로 설정함
-	SetConsoleCursorInfo(s_consoleHandle, &info);
+    const static COORD initialPos = { 0,0 };
+    const static CONSOLE_CURSOR_INFO info = { 100, false };
 
-	// 렌더 시 테어링 현상이 발생 하는 것을 방지하기 위해
-	// 더블 버퍼링을 통해 하나는 보여주는 용, 하나는 렌더용으로 둠
-	//memcpy(s_map, s_backBuffer, sizeof(s_map));
+    SetConsoleCursorPosition(s_consoleHandle, initialPos);
+    // Init에서 해줬을 때 콘솔 창이 변하거나 변화가 생기면
+    // 다시 포지션이 깨졌기에 렌더 해줄 때마다 초기값으로 설정함
+    SetConsoleCursorInfo(s_consoleHandle, &info);
 
-	// Sleep 함수 사용을 기피해야 하는 이유
-	// 쓰레드가 멈춰버림 -> 프로그램이 멈춤
-	// 게임에서는 프로그램이 멈추는 일은 없어야 함
-	// 차라리 멈춰있는 장면을 계속 보여주는 것이 더 권장됨
+    /*sprintf_s(s_map[0], sizeof(s_map[0]), "DeltaTime : %f", GetDeltaTime());
+    */
 
-	//sprintf_s(s_map[0], sizeof(s_map[0]), "DeltaTime : %f", GetDeltaTime());
-	//// 1 : deltaTime = x : 1  -> x = 1 / deltaTime
-	//int32_t fps = (int32_t)(1 / GetDeltaTime());
-	//sprintf_s(s_map[1], sizeof(s_map[1]), "FPS : %d", fps);
-	//for (size_t i = 0; i < MAP_SIZE; ++i)
-	//{
-	//	puts(s_map[i]);
-	//}
+    /*int32_t fps = 1 / GetDeltaTime();
+    sprintf_s(s_map[1], sizeof(s_map[1]), "FPS : %d", fps);*/
+    // 1 : deltaTime(초단위) = x : 1
+    // x = 1 / deltaTime
 
-	// 출력 후 현재 프레임을 지워줌
-	clear();
-}
+    for (size_t i = 0; i < MAP_SIZE; ++i)
+    {
+        puts(s_map[i]);
+    }
 
-void SetKeyMessage(int32_t keyCode)
-{
-	sprintf_s(s_map[0], sizeof(s_map[0]), "%c키가 눌림", keyCode);
+    // 출력 후에 현재 프레임을 지움.
+    clear();
 }
 
 void SetMessage(const char* message)
 {
-	strcpy_s(s_map[0], sizeof(s_map[0]), message);
-	//sprintf_s(s_map[0], sizeof(s_map[0]), "%s", message);
+    strcpy_s(s_map[0], MAP_SIZE, message);
 }
