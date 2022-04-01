@@ -57,7 +57,7 @@ bool BoxMove(EDir input_dir)
 		break;
 	}
 
-	if (s_map[boxY][boxX] == MAPTYPE_PATH || s_map[boxY][boxX] == MAPTYPE_BOX_ON_GOAL)
+	if (s_map[boxY][boxX] == MAPTYPE_PATH)
 	{
 		s_map[boxY][boxX] = 'B';
 		return true;
@@ -66,6 +66,11 @@ bool BoxMove(EDir input_dir)
 	{
 		s_map[boxY][boxX] = '@';
 		s_boxOnGoalCount++;
+		return true;
+	}
+	else if (s_map[boxY][boxX] == MAPTYPE_BOX_ON_GOAL)
+	{
+		s_map[boxY][boxX] = '@';
 		return true;
 	}
 	else
@@ -258,6 +263,8 @@ void GameOver()
 }
 
 // 소코반 게임 완성
-// 1. @에서 밀면 박스 체크를 다시 해줘야 함
+// 1. @에서 밀면 박스가 다시 나옴 -> 해결
+// 2. @에서 박스를 민 후 원래 O였던 부분 O로 바꿔줌 -> 해결
+// 3. @에서 박스를 O로 밀었을 때 새로 밀린 곳이 @가 되야함.
 // 연출 추가
 // 컨텐츠 추가(함정 같은거)
