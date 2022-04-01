@@ -26,6 +26,12 @@ void InputSystemUI()
 	gotoXY(65, 14); printf("ESC : 게임 종료");
 }
 
+void GameBoardUI(EStageLevel stageLevel, int32_t goalCount, int32_t boxOnGoalCount)
+{
+	gotoXY(60, 4); printf("STAGE LEVEL : %d", stageLevel);
+	gotoXY(60, 5); printf("진행도 : %d%/%d", boxOnGoalCount, goalCount);
+}
+
 void GameOverUI()
 {
 	gotoXY(26, 18); printf("게임이 종료되었습니다.\n");

@@ -27,6 +27,10 @@ bool parseMapType(int32_t i, int32_t j, char mapType)
 		s_goalCount++;
 		return true;
 	case MAPTYPE_BOX_ON_GOAL:
+	{
+		s_goalCount++;
+		s_boxOnGoalCount++;
+	}
 		return true;
 	case MAPTYPE_PATH:
 		return true;
@@ -238,6 +242,7 @@ void UpdateStage()
 	// 입력에 대해서 처리를 함
 	PlayerInput();
 	// 게임이 클리어 됐는지도 파악함
+	GameBoardUI(s_stageLevel, s_goalCount, s_boxOnGoalCount);
 	if (isStageClear())
 	{
 		DeletePlayer(s_player);
@@ -270,7 +275,3 @@ void GameOver()
 	GameOverUI();
 	exit(1);
 }
-
-// P@# 상황에서 더 밀었을 때 O가 나오는 상황 
-// 연출 추가
-// 컨텐츠 추가(함정 같은거)

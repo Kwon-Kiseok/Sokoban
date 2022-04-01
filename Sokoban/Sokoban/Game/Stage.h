@@ -23,6 +23,9 @@ typedef enum StageLevel
 	STAGE_04,
 	STAGE_05,
 	STAGE_06,
+	STAGE_07,
+	STAGE_08,
+	STAGE_09,
 	STAGE_MAX 
 }EStageLevel;
 
