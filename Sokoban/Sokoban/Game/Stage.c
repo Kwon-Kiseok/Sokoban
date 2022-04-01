@@ -63,12 +63,12 @@ bool BoxMove(EDir input_dir)
 
 	if (s_map[boxY][boxX] == MAPTYPE_PATH)
 	{
-		s_map[boxY][boxX] = 'B';
+		s_map[boxY][boxX] = MAPTYPE_BOX;
 		return true;
 	}
 	else if (s_map[boxY][boxX] == MAPTYPE_GOAL)
 	{
-		s_map[boxY][boxX] = '@';
+		s_map[boxY][boxX] = MAPTYPE_BOX_ON_GOAL;
 		s_boxOnGoalCount++;
 		return true;
 	}
@@ -82,7 +82,7 @@ bool BoxMove(EDir input_dir)
 
 bool CanMove(int32_t i, int32_t j, EDir input_dir)
 {
-	char** curPos = s_map[s_player->pos_y][s_player->pos_x];
+	char curPos = s_map[s_player->pos_y][s_player->pos_x];
 	// 현재 이동한 곳이 벽일 경우
 	if (curPos == MAPTYPE_WALL)
 	{
@@ -181,10 +181,10 @@ void PlayerMove()
 {
 	// 원래 있던 곳 소멸
 	if (!s_player->isMoveOnGoal)
-		s_map[s_player->pos_y][s_player->pos_x] = ' ';
+		s_map[s_player->pos_y][s_player->pos_x] = MAPTYPE_PATH;
 	// 원래 있던 곳이 Goal일 경우 'O'로 돌려줌
 	else if(s_player->isMoveOnGoal)
-		s_map[s_player->pos_y][s_player->pos_x] = 'O';
+		s_map[s_player->pos_y][s_player->pos_x] = MAPTYPE_GOAL;
 
 	if (GetButtonUp(KEYCODE_W))
 	{
@@ -219,7 +219,7 @@ void PlayerMove()
 		}
 	}
 	// 새로 도착한 곳에 그려줌
-	s_map[s_player->pos_y][s_player->pos_x] = 'P';
+	s_map[s_player->pos_y][s_player->pos_x] = MAPTYPE_PLAYER;
 }
 
 void PlayerInput()
