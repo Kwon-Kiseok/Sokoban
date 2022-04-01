@@ -27,6 +27,10 @@ bool parseMapType(int32_t i, int32_t j, char mapType)
 		s_goalCount++;
 		return true;
 	case MAPTYPE_BOX_ON_GOAL:
+	{
+		s_goalCount++;
+		s_boxOnGoalCount++;
+	}
 		return true;
 	case MAPTYPE_PATH:
 		return true;
@@ -70,8 +74,7 @@ bool BoxMove(EDir input_dir)
 	}
 	else if (s_map[boxY][boxX] == MAPTYPE_BOX_ON_GOAL)
 	{
-		s_map[boxY][boxX] = '@';
-		return true;
+		return false;
 	}
 	else
 		return false;
@@ -102,11 +105,11 @@ bool CanMove(int32_t i, int32_t j, EDir input_dir)
 	// 현재 이동한 곳이 BoxOnGoal일 경우
 	else if (curPos == MAPTYPE_BOX_ON_GOAL)
 	{
-		s_player->isMoveOnGoal = true;
-		s_boxOnGoalCount--;
 		// 박스 이동
 		if (!BoxMove(input_dir))
 			return false;
+		s_player->isMoveOnGoal = true;
+		s_boxOnGoalCount--;
 		return true;
 	}
 	s_player->isMoveOnGoal = false;
@@ -124,6 +127,7 @@ void clearStage()
 	s_boxOnGoalCount = 0;
 	s_playerX = 0;
 	s_playerY = 0;
+	s_player = NULL;
 }
 
 bool isStageClear()
@@ -179,7 +183,7 @@ void PlayerMove()
 	if (!s_player->isMoveOnGoal)
 		s_map[s_player->pos_y][s_player->pos_x] = ' ';
 	// 원래 있던 곳이 Goal일 경우 'O'로 돌려줌
-	else
+	else if(s_player->isMoveOnGoal)
 		s_map[s_player->pos_y][s_player->pos_x] = 'O';
 
 	if (GetButtonUp(KEYCODE_W))
@@ -220,11 +224,14 @@ void PlayerMove()
 
 void PlayerInput()
 {
-
 	// 스테이지 리셋 버튼
 	if (GetButtonUp(KEYCODE_R))
 	{
 		LoadStage(s_stageLevel);
+	}
+	else if (GetButtonUp(KEYCODE_ESC))
+	{
+		GameOver();
 	}
 	// 플레이어 이동
 	PlayerMove();
@@ -235,6 +242,7 @@ void UpdateStage()
 	// 입력에 대해서 처리를 함
 	PlayerInput();
 	// 게임이 클리어 됐는지도 파악함
+	GameBoardUI(s_stageLevel, s_goalCount, s_boxOnGoalCount);
 	if (isStageClear())
 	{
 		DeletePlayer(s_player);
@@ -244,7 +252,7 @@ void UpdateStage()
 		}
 		else
 		{
-			GameOver();
+			GameClear();
 		}
 	}
 
@@ -255,16 +263,15 @@ const char** GetMap()
 	return (char**)s_map;
 }
 
-void GameOver()
+void GameClear()
 {
 	system("cls");
 	puts("-   게임 클리어   -");
 	exit(1);
 }
 
-// 소코반 게임 완성
-// 1. @에서 밀면 박스가 다시 나옴 -> 해결
-// 2. @에서 박스를 민 후 원래 O였던 부분 O로 바꿔줌 -> 해결
-// 3. @에서 박스를 O로 밀었을 때 새로 밀린 곳이 @가 되야함.
-// 연출 추가
-// 컨텐츠 추가(함정 같은거)
+void GameOver()
+{
+	GameOverUI();
+	exit(1);
+}
