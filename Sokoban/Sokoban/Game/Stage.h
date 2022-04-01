@@ -22,6 +22,7 @@ typedef enum StageLevel
 	STAGE_03,
 	STAGE_04,
 	STAGE_05,
+	STAGE_06,
 	STAGE_MAX 
 }EStageLevel;
 
@@ -37,5 +38,7 @@ void LoadStage(EStageLevel level);
 void UpdateStage();
 
 const char** GetMap();
+
+void GameClear();
 
 void GameOver();

@@ -44,7 +44,7 @@ void RenderMap()
         puts(s_map[i]);
     }
 
-    UI();
+    InputSystemUI();
     clear();
 }
 
