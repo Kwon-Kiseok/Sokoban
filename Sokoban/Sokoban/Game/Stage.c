@@ -97,9 +97,12 @@ bool CanMove(int32_t i, int32_t j, EDir input_dir)
 	// 현재 이동한 곳이 BoxOnGoal일 경우
 	else if (curPos == MAPTYPE_BOX_ON_GOAL)
 	{
+		s_player->isMoveOnGoal = true;
+		s_boxOnGoalCount--;
 		// 박스 이동
 		if (!BoxMove(input_dir))
 			return false;
+		return true;
 	}
 	s_player->isMoveOnGoal = false;
 	return true;
@@ -165,16 +168,8 @@ void LoadStage(EStageLevel level)
 	fclose(fp);
 }
 
-void PlayerInput()
+void PlayerMove()
 {
-
-	// 스테이지 리셋 버튼
-	if (GetButtonUp(KEYCODE_R))
-	{
-		LoadStage(s_stageLevel);
-	}
-
-	// 플레이어 이동
 	// 원래 있던 곳 소멸
 	if (!s_player->isMoveOnGoal)
 		s_map[s_player->pos_y][s_player->pos_x] = ' ';
@@ -218,6 +213,18 @@ void PlayerInput()
 	s_map[s_player->pos_y][s_player->pos_x] = 'P';
 }
 
+void PlayerInput()
+{
+
+	// 스테이지 리셋 버튼
+	if (GetButtonUp(KEYCODE_R))
+	{
+		LoadStage(s_stageLevel);
+	}
+	// 플레이어 이동
+	PlayerMove();
+}
+
 void UpdateStage()
 {
 	// 입력에 대해서 처리를 함
@@ -251,6 +258,6 @@ void GameOver()
 }
 
 // 소코반 게임 완성
-// 스테이지 여러 개 추가
+// 1. @에서 밀면 박스 체크를 다시 해줘야 함
 // 연출 추가
 // 컨텐츠 추가(함정 같은거)
