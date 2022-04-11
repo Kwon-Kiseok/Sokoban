@@ -42,6 +42,13 @@ void UpdateStage();
 
 const char** GetMap();
 
+void clearStage();
+
 void GameClear();
 
 void GameOver();
+
+bool parseMapType(int32_t i, int32_t j, char mapType);
+bool isStageClear();
+void PlayerMove();
+void PlayerInput();
